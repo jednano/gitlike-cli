@@ -15,7 +15,7 @@ What you won't find in Git-like CLI are some [commander][] features, such
 as prompts, password masking, confirm and choose. If you need these features,
 [commander][] is highly recommended.
 
-[![Build Status][]](http://travis-ci.org/jedhunsaker/gitlike-cli.js)
+[![Build Status][]](http://travis-ci.org/jedhunsaker/gitlike-cli)
 
 
 ## Installation
@@ -274,14 +274,6 @@ Examples:
 
 ```
 
-## .outputHelp()
-
-  Output help information without exiting.
-
-## .help()
-
-  Output help information and exit immediately.
-
 ## License
 
 ```
@@ -314,4 +306,4 @@ THE SOFTWARE.
 [commander]: https://npmjs.org/package/commander
 [git command and its sub-commands]: http://git-scm.com/docs
 [git commit]: http://git-scm.com/docs/git-commit
-[Build Status]: https://secure.travis-ci.org/jedhunsaker/gitlike-cli.js.png
+[Build Status]: https://secure.travis-ci.org/jedhunsaker/gitlike-cli.png
