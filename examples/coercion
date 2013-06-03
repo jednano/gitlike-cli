@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('../');
+
+function range(val) {
+    return val.split('..').map(Number) || [];
+}
+
+function list(val) {
+    return val.split(',');
+}
+
+program
+    .option('-i, --integer <n>', 'An integer argument')
+    .option('-f, --float <n>', 'A float argument')
+    .option('-r, --range <a>..<b>', 'A range', range)
+    .option('-l, --list <items>', 'A list', list)
+    .option('-j, --json <object>', 'A json object')
+    .option('-o, --optional [value]', 'An optional value')
+    .parse(process.argv);
+
+var options = program.options;
+console.log(' int: %j', options.integer);
+console.log(' float: %j', options.float);
+options.range = options.range || [];
+console.log(' range: %j..%j', options.range[0], options.range[1]);
+console.log(' list: %j', options.list);
+console.log(' json: %j', options.json);
+console.log(' optional: %j', options.optional);
+console.log(' args.etc: %j', program.args.etc);

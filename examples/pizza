@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('../');
+
+program
+    .option('-p, --peppers', 'Add peppers')
+    .option('-P, --pineapple', 'Add pineapple')
+    .option('-b, --bbq', 'Add bbq sauce')
+    .option('-c, --cheese <type>', 'Add the specified type of cheese [marble]', 'marble')
+    .option('-C, --no-cheese', 'You do not want any cheese')
+    .parse(process.argv);
+
+var options = program.options;
+console.log('you ordered a pizza with:');
+if (options.peppers) console.log('  - peppers');
+if (options.pineapple) console.log('  - pineapple');
+if (options.bbq) console.log('  - bbq');
+console.log('  - %s cheese', options.cheese || 'no');
