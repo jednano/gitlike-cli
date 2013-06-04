@@ -1,2 +1,6 @@
-node_modules
-*.log
+examples
+test
+.editorconfig
+.gitattributes
+.npmignore
+.travis.yml
