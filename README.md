@@ -274,6 +274,58 @@ Examples:
 
 ```
 
+## Error Handling
+
+The base command for your program already has some error handling built-in.
+If you decide, however, that you want more control over the errors emitted,
+simply handle the `error` event in your code. In the example below, the error
+message is printed in red. Everything else is exactly what you would see in
+Git-like CLI's index.js.
+
+```js
+var clc = require('cli-color');
+
+program.on('error', function(err){
+    console.log();
+    console.log(clc.red('  Error:', err.message));
+    program.outputUsage();
+    program.outputCommands();
+    program.outputOptions();
+    console.log();
+    process.exit(1);
+});
+
+program.parse(process.argv);
+```
+
+IMPORTANT: Make absolutely sure that your error handler comes _before_
+`program.parse(process.argv)`. Even better, though totally up to you, put it
+before defining your version, description or any other program information.
+This allows errors in your own code to present themself through your custom
+error handler as well.
+
+The final `process.exit(1);` tells node to exit the program immediately with
+an error code (any non-zero integer). Your error handler will always be called
+before Git-like CLI's built-in error handler, so this gives you an opportunity
+to do your own thing and stump the program from doing anything after the fact.
+
+You might have noticed a few undocumented methods above (i.e., outputUsage,
+outputCommands and outputOptions). Their names are quite self-explanatory, so
+I trust you know what they do.
+
+You _could_ just output the error message itself and bypass all the usage
+information. The output would then look something like this:
+
+```
+$ ./bin/program foo
+
+  Error: Invalid sub-command: foo
+```
+
+Any unhandled errors will not emit an error event, so it will be pretty ugly.
+Please report any issues like this in the [Issue Tracker][].
+
+
 ## License
 
 ```
@@ -307,3 +359,4 @@ THE SOFTWARE.
 [git command and its sub-commands]: http://git-scm.com/docs
 [git commit]: http://git-scm.com/docs/git-commit
 [Build Status]: https://secure.travis-ci.org/jedhunsaker/gitlike-cli.png
+[Issue Tracker]: https://github.com/jedhunsaker/gitlike-cli/issues
