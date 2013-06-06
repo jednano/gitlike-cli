@@ -281,17 +281,17 @@ The base command for your program already has some error handling built-in.
 If you decide, however, that you want more control over the errors emitted,
 simply handle the `error` event in your code. In the example below, the error
 message is printed in red. Everything else is exactly what you would see in
-Git-like CLI's index.js.
+Git-like CLI's built-in error handling.
 
 ```js
 var clc = require('cli-color');
 
-program.on('error', function(err){
-    console.log();
+program.on('error', function(err, command){
+    console.log('');
     console.log(clc.red('  Error:', err.message));
-    program.outputUsage();
-    program.outputCommands();
-    program.outputOptions();
+    command.outputUsage();
+    command.outputCommands();
+    command.outputOptions();
     console.log();
     process.exit(1);
 });
