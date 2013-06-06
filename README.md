@@ -202,19 +202,20 @@ function square(val) {
 }
 
 program
-  .version('0.0.1')
-  .usage('[options] <file>...')
+  .usage('<files>...')
   .option('-s, --square <x>', 'A square of x', square)
   .option('-r, --range <a>..<b>', 'A range', range)
   .option('-l, --list <items>', 'A list', list)
   .option('-o, --optional [value]', 'An optional value')
   .parse(process.argv);
 
-console.log(' square: %j', program.square);
-console.log(' range: %j..%j', program.range[0], program.range[1]);
-console.log(' list: %j', program.list);
-console.log(' optional: %j', program.optional);
-console.log(' args: %j', program.args);
+var options = program.options;
+console.log(' options.square: %j', options.square);
+options.range = options.range || [];
+console.log(' options.range: %j..%j', options.range[0], options.range[1]);
+console.log(' options.list: %j', options.list);
+console.log(' options.optional: %j', options.optional);
+console.log(' args.files: %j', program.args.files);
 ```
 
 ## Custom help
