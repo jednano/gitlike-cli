@@ -55,15 +55,15 @@ describe('Command', function () {
     });
 
     it('supports arguments', function () {
-        cmd.usage('cmd <foo>');
+        cmd.usage('<foo>');
         expect(cmd._args[0]).to.be.instanceof(Argument);
     });
 
     it('supports repeating arguments', function () {
-        cmd.usage('cmd <foo>...');
+        cmd.usage('<foo>...');
         expect(cmd._args[0]).to.have.property('repeating').and.be.true;
 
-        cmd.usage('cmd [<foo>...]');
+        cmd.usage('[<foo>...]');
         expect(cmd._args[0]).to.have.property('repeating').and.be.true;
     });
 
@@ -126,7 +126,7 @@ describe('Command', function () {
         });
 
         it('leaves args not consumed in args.etc', function() {
-            cmd.usage('cmd <foo> [bar]');
+            cmd.usage('<foo> [bar]');
             cmd.option('-f <bar>');
             cmd.option('-b [qux]');
 
@@ -135,7 +135,7 @@ describe('Command', function () {
         });
 
         it('parses [foo] [bar] [baz] properly', function () {
-            cmd.usage('cmd [foo] [bar] [baz]');
+            cmd.usage('[foo] [bar] [baz]');
 
             cmd.parse();
             expect(cmd.args).to.not.have.property('foo');
@@ -159,7 +159,7 @@ describe('Command', function () {
         });
 
         it('parses <foo> <bar> <baz> properly', function () {
-            cmd.usage('cmd <foo> <bar> <baz>');
+            cmd.usage('<foo> <bar> <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
             function parseTooFewArguments() {
@@ -173,7 +173,7 @@ describe('Command', function () {
         });
 
         it('parses <foo>... properly', function () {
-            cmd.usage('cmd <foo>...');
+            cmd.usage('<foo>...');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
             function parseTooFewArguments() {
@@ -188,7 +188,7 @@ describe('Command', function () {
         });
 
         it('parses <foo> [bar] <baz> properly', function () {
-            cmd.usage('cmd <foo> [bar] <baz>');
+            cmd.usage('<foo> [bar] <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
             function parseTooFewArguments() {
@@ -207,7 +207,7 @@ describe('Command', function () {
         });
 
         it('parses [foo] <bar> <baz> properly', function () {
-            cmd.usage('cmd [foo] <bar> <baz>');
+            cmd.usage('[foo] <bar> <baz>');
 
             expect(parseTooFewArguments).to.Throw(cmd.Error);
             function parseTooFewArguments() {
@@ -226,7 +226,7 @@ describe('Command', function () {
         });
 
         it('parses [foo] <bar> [<baz>...] properly', function () {
-            cmd.usage('cmd [foo] <bar> [<baz>...]');
+            cmd.usage('[foo] <bar> [<baz>...]');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
             function parseTooFewArguments() {
@@ -255,7 +255,7 @@ describe('Command', function () {
         });
 
         it('parses <foo>... <bar> <baz> properly', function () {
-            cmd.usage('cmd <foo>... <bar> <baz>');
+            cmd.usage('<foo>... <bar> <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
             function parseTooFewArguments() {
@@ -274,7 +274,7 @@ describe('Command', function () {
         });
 
         it('parses <foo> [<bar>...] <baz> properly', function () {
-            cmd.usage('cmd <foo> [<bar>...] <baz>');
+            cmd.usage('<foo> [<bar>...] <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
             function parseTooFewArguments() {
@@ -293,7 +293,7 @@ describe('Command', function () {
         });
 
         it('parses flags and arguments together', function() {
-            cmd.usage('cmd [foo] <bar>');
+            cmd.usage('[foo] <bar>');
             cmd.option('-c, --color <color>');
 
             parse(cmd, '-c orange a b c');
@@ -324,7 +324,7 @@ describe('Command', function () {
         });
 
         it('parses combo short flags with opt/req values, followed by args', function() {
-            cmd.usage('cmd [foo] <bar>');
+            cmd.usage('[foo] <bar>');
             cmd.option('-c, --color <color>');
             cmd.option('-F, --not-free');
             cmd.option('-q, --quantity <n>');
@@ -350,7 +350,7 @@ describe('Command', function () {
         });
 
         it('supports the unparse command, which erases all parsed values', function() {
-            cmd.usage('cmd [foo] <bar>');
+            cmd.usage('[foo] <bar>');
             cmd.option('-b, --baz');
 
             parse(cmd, '-b a b');
