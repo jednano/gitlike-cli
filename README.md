@@ -105,12 +105,13 @@ There are four different types of arguments you can supply.
 
 You can combine any number of arguments you want; however, be aware that some
 combinations are ambiguous and will throw an error. There are only two
-scenarios for this to happen:
+scenarios for this to happen. These errors will be thrown when you provide
+usage information:
 
 1. CommandError: Cannot have more than one repeating arg.
 1. CommandError: Cannot have an optional arg after a repeating arg.
 
-These errors will be thrown when you provide usage information. When arguments
+If no errors are thrown, the CLI moves onto the parsing stage. When arguments
 are parsed, they will be stored in the program's `args` property. For example,
 if the argument is named `<bar>`, like above, calling `$ foo qux` will store
 the string `qux` in `program.args.bar`.
@@ -138,7 +139,7 @@ Example usage: `[foo] [bar] <baz>`
 
 + Parsing `x` produces `{baz:'x'}`
 + Parsing `x y` produces `{foo:'x', baz:'y'}`
-+ Parsing `x y z` produces `{foo:'x', baz:'y', bar:'z'}`
++ Parsing `x y z` produces `{foo:'x', bar:'y', baz:'z'}`
 
 
 ## Options
