@@ -362,3 +362,7 @@ THE SOFTWARE.
 [git commit]: http://git-scm.com/docs/git-commit
 [Build Status]: https://secure.travis-ci.org/jedmao/gitlike-cli.png
 [Issue Tracker]: https://github.com/jedhunsaker/gitlike-cli/issues
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jedmao/gitlike-cli/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
