@@ -6,6 +6,7 @@ var Command = require('../lib/Command');
 var Option = require('../lib/Option');
 
 
+// ReSharper disable WrongExpressionStatement
 describe('Command', function () {
 
     var cmd;
@@ -24,11 +25,11 @@ describe('Command', function () {
         expect(cmd.help).to.be.calledOnce;
     });
 
-    it('outputs version information on -V or --version', function() {
+    it('outputs version information on -v or --version', function() {
         cmd.version('0.1.2');
         sinon.stub(cmd, 'version').returns();
 
-        parse(cmd, '-V');
+        parse(cmd, '-v');
         expect(cmd.outputVersion).to.be.calledOnce;
 
         cmd.version.reset();

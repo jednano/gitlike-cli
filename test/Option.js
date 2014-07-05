@@ -4,6 +4,7 @@ var Argument = require('../lib/Argument');
 var Option = require('../lib/Option');
 
 
+// ReSharper disable WrongExpressionStatement
 describe('Option', function() {
 
     it('supports short flags', function() {
@@ -23,6 +24,14 @@ describe('Option', function() {
         expect(opt).to.have.property('short').and.equal('f');
         expect(opt).to.have.property('long').and.equal('foo');
         expect(opt).to.have.property('name').and.equal('foo');
+    });
+
+    it('supports short-long combo flags with an argument', function() {
+        var opt = new Option('-f, --foo <bar>');
+        expect(opt).to.have.property('short').and.equal('f');
+        expect(opt).to.have.property('long').and.equal('foo');
+        expect(opt).to.have.property('name').and.equal('foo');
+        expect(opt).to.have.property('arg').and.be.instanceOf(Argument);
     });
 
     it('supports dashed names', function() {

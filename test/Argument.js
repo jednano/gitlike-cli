@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var Argument = require('../lib/Argument');
 
 
+// ReSharper disable WrongExpressionStatement
 describe('Argument', function () {
 
     it('supports optional mode', function () {

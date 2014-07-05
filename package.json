@@ -1,6 +1,6 @@
 {
   "name": "gitlike-cli",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "A git-like CLI library",
   "keywords": [
     "git",
@@ -24,8 +24,8 @@
   "bugs": "https://github.com/jedhunsaker/gitlike-cli/issues",
   "license": "MIT",
   "devDependencies": {
-    "chai": "~1.6.0",
-    "mocha": "~1.10.0",
-    "sinon": "~1.7.2"
+    "chai": "^1.9.1",
+    "mocha": "^1.20.1",
+    "sinon": "^1.10.2"
   }
 }
