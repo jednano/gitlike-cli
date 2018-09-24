@@ -24,8 +24,13 @@
   "bugs": "https://github.com/jedhunsaker/gitlike-cli/issues",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.20.1",
-    "sinon": "^1.10.2"
+    "@types/chai": "^4.1.5",
+    "@types/mocha": "^5.2.5",
+    "@types/sinon": "^5.0.2",
+    "@types/sinon-chai": "^3.2.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "sinon": "^6.3.4",
+    "sinon-chai": "^3.2.0"
   }
 }

@@ -1,12 +1,13 @@
-var expect = require('chai').expect;
+var chai = require('chai');
 var sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const expect = chai.expect;
+chai.use(sinonChai);
 
 var Argument = require('../lib/Argument');
 var Command = require('../lib/Command');
 var Option = require('../lib/Option');
 
-
-// ReSharper disable WrongExpressionStatement
 describe('Command', function () {
 
     var cmd;
@@ -30,12 +31,12 @@ describe('Command', function () {
         sinon.stub(cmd, 'version').returns();
 
         parse(cmd, '-v');
-        expect(cmd.outputVersion).to.be.calledOnce;
+        expect(cmd.version).to.be.calledOnce;
 
         cmd.version.reset();
 
         parse(cmd, '--version');
-        expect(cmd.outputVersion).to.be.calledOnce;
+        expect(cmd.version).to.be.calledOnce;
     });
 
     it('supports sub-commands', function () {
