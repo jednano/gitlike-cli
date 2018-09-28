@@ -1,10 +1,11 @@
-﻿var util = require('./util');
+﻿import CLIObject from './CLIObject';
 
-function CLIError(message) {
-    CLIError.super_.call(this);
-    this.message = message || '';
+export default class CLIError extends Error {
+    name = 'CLIError';
+
+    public command: CLIObject | null = null;
+
+    constructor(public message = '') {
+        super();
+    }
 }
-
-module.exports = util.inherits(CLIError, Error, {
-    name: 'CLIError'
-});

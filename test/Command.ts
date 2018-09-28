@@ -1,106 +1,108 @@
-var expect = require('chai').expect;
-var sinon = require('sinon');
+import * as chai from 'chai';
+import * as sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+const expect = chai.expect;
+chai.use(sinonChai);
 
-var Argument = require('../lib/Argument');
-var Command = require('../lib/Command');
-var Option = require('../lib/Option');
+import Argument from '../lib/Argument';
+import Command from '../lib/Command';
+import Option from '../lib/Option';
 
+describe('Command', () => {
 
-// ReSharper disable WrongExpressionStatement
-describe('Command', function () {
-
-    var cmd;
-    beforeEach(function () {
+    let cmd: Command;
+    let help: sinon.SinonStub;
+    beforeEach(() => {
         cmd = new Command();
-        sinon.stub(cmd, 'help').returns();
+        help = sinon.stub(cmd, 'help').returns(undefined);
     });
 
-    it('outputs help information on -h or --help', function() {
+    it('outputs help information on -h or --help', () => {
         parse(cmd, '-h');
-        expect(cmd.help).to.be.calledOnce;
+        expect(help).to.be.calledOnce;
 
-        cmd.help.reset();
+        help.reset();
 
         parse(cmd, '--help');
-        expect(cmd.help).to.be.calledOnce;
+        expect(help).to.be.calledOnce;
     });
 
-    it('outputs version information on -v or --version', function() {
+    it('outputs version information on -v or --version', () => {
         cmd.version('0.1.2');
-        sinon.stub(cmd, 'version').returns();
+        const version = sinon.stub(cmd, 'version');
 
         parse(cmd, '-v');
-        expect(cmd.outputVersion).to.be.calledOnce;
+        expect(version).to.be.calledOnce;
 
-        cmd.version.reset();
+        version.reset();
 
         parse(cmd, '--version');
-        expect(cmd.outputVersion).to.be.calledOnce;
+        expect(version).to.be.calledOnce;
     });
 
-    it('supports sub-commands', function () {
+    it('supports sub-commands', () => {
         cmd.command('*');
         expect(cmd.commands).to.have.property('*').and.be.an.instanceof(Command);
         expect(cmd.commands.foo).to.not.equal(cmd);
     });
 
-    it('supports options', function () {
+    it('supports options', () => {
         cmd.option('-f');
-        expect(cmd._options).to.have.property('f').and.be.instanceof(Option);
+        expect((cmd as any)._options).to.have.property('f').and.be.instanceof(Option);
     });
 
-    it('supports default values for options', function() {
+    it('supports default values for options', () => {
         cmd.option('-f', null, 'bar');
         cmd.parse();
         expect(cmd.options).to.have.property('f').and.equal('bar');
     });
 
-    it('supports arguments', function () {
+    it('supports arguments', () => {
         cmd.usage('<foo>');
-        expect(cmd._args[0]).to.be.instanceof(Argument);
+        expect((cmd as any)._args[0]).to.be.instanceof(Argument);
     });
 
-    it('supports repeating arguments', function () {
+    it('supports repeating arguments', () => {
         cmd.usage('<foo>...');
-        expect(cmd._args[0]).to.have.property('repeating').and.be.true;
+        expect((cmd as any)._args[0]).to.have.property('repeating').and.be.true;
 
         cmd.usage('[<foo>...]');
-        expect(cmd._args[0]).to.have.property('repeating').and.be.true;
+        expect((cmd as any)._args[0]).to.have.property('repeating').and.be.true;
     });
 
-    describe('Parsing', function () {
+    describe('Parsing', () => {
 
-        it("doesn't error when no arguments are sent or required", function () {
+        it("doesn't error when no arguments are sent or required", () => {
             cmd.parse();
             parse(cmd, '');
         });
 
-        it('parses solo short flags as true', function () {
+        it('parses solo short flags as true', () => {
             cmd.option('-f');
             parse(cmd, '-f');
             expect(cmd.options).to.have.property('f').and.be.true;
         });
 
-        it('parses solo long flags as true', function () {
+        it('parses solo long flags as true', () => {
             cmd.option('--foo');
             parse(cmd, '--foo');
             expect(cmd.options).to.have.property('foo').and.be.true;
         });
 
-        it('parses long flags with hyphens as camel-case', function() {
+        it('parses long flags with hyphens as camel-case', () => {
             cmd.option('--foo-bar');
             parse(cmd, '--foo-bar');
             expect(cmd.options).to.have.property('fooBar');
         });
 
-        it('parses long flag as true when options has both short and long flags', function () {
+        it('parses long flag as true when options has both short and long flags', () => {
             cmd.option('-f, --foo');
             parse(cmd, '-f');
             expect(cmd.options).not.to.have.property('f');
             expect(cmd.options).to.have.property('foo').and.be.true;
         });
 
-        it('parses --no- and --not- flags to negate their true flags', function () {
+        it('parses --no- and --not- flags to negate their true flags', () => {
             cmd.option('-F, --no-foo');
             cmd.option('-B, --not-bar');
 
@@ -113,7 +115,7 @@ describe('Command', function () {
             expect(cmd.options).to.have.property('bar').and.be.false;
         });
 
-        it('parses optional flag values', function() {
+        it('parses optional flag values', () => {
             cmd.option('-f [bar]');
             parse(cmd, '-f');
             expect(cmd.options.f).to.be.undefined;
@@ -126,7 +128,7 @@ describe('Command', function () {
             expect(cmd.options).to.have.property('b').and.equal('foo');
         });
 
-        it('leaves args not consumed in args.etc', function() {
+        it('leaves args not consumed in args.etc', () => {
             cmd.usage('<foo> [bar]');
             cmd.option('-f <bar>');
             cmd.option('-b [qux]');
@@ -135,7 +137,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('etc').and.deep.equal(['e', 'f', 'g']);
         });
 
-        it('parses [foo] [bar] [baz] properly', function () {
+        it('parses [foo] [bar] [baz] properly', () => {
             cmd.usage('[foo] [bar] [baz]');
 
             cmd.parse();
@@ -159,7 +161,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.equal('c');
         });
 
-        it('parses <foo> <bar> <baz> properly', function () {
+        it('parses <foo> <bar> <baz> properly', () => {
             cmd.usage('<foo> <bar> <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
@@ -173,7 +175,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.equal('c');
         });
 
-        it('parses <foo>... properly', function () {
+        it('parses <foo>... properly', () => {
             cmd.usage('<foo>...');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
@@ -188,7 +190,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('foo').and.deep.equal(['a', 'b', 'c']);
         });
 
-        it('parses <foo> [bar] <baz> properly', function () {
+        it('parses <foo> [bar] <baz> properly', () => {
             cmd.usage('<foo> [bar] <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
@@ -207,7 +209,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.equal('z');
         });
 
-        it('parses [foo] <bar> <baz> properly', function () {
+        it('parses [foo] <bar> <baz> properly', () => {
             cmd.usage('[foo] <bar> <baz>');
 
             expect(parseTooFewArguments).to.Throw(cmd.Error);
@@ -226,7 +228,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.equal('z');
         });
 
-        it('parses [foo] <bar> [<baz>...] properly', function () {
+        it('parses [foo] <bar> [<baz>...] properly', () => {
             cmd.usage('[foo] <bar> [<baz>...]');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
@@ -255,7 +257,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.deep.equal(['c', 'x', 'y', 'z']);
         });
 
-        it('parses <foo>... <bar> <baz> properly', function () {
+        it('parses <foo>... <bar> <baz> properly', () => {
             cmd.usage('<foo>... <bar> <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
@@ -274,7 +276,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.deep.equal('z');
         });
 
-        it('parses <foo> [<bar>...] <baz> properly', function () {
+        it('parses <foo> [<bar>...] <baz> properly', () => {
             cmd.usage('<foo> [<bar>...] <baz>');
 
             expect(parseTooFewArguments).to.throw(cmd.Error);
@@ -293,7 +295,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('baz').and.equal('z');
         });
 
-        it('parses flags and arguments together', function() {
+        it('parses flags and arguments together', () => {
             cmd.usage('[foo] <bar>');
             cmd.option('-c, --color <color>');
 
@@ -304,7 +306,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('etc').and.deep.equal(['c']);
         });
 
-        it('parses combo short flags', function() {
+        it('parses combo short flags', () => {
             cmd.option('-a');
             cmd.option('-b');
             cmd.option('-c');
@@ -314,7 +316,7 @@ describe('Command', function () {
             expect(cmd.options).to.have.property('c').and.be.true;
         });
 
-        it('parses combo short flags with a value', function() {
+        it('parses combo short flags with a value', () => {
             cmd.option('-a');
             cmd.option('-b');
             cmd.option('-c <foo>');
@@ -324,7 +326,7 @@ describe('Command', function () {
             expect(cmd.options).to.have.property('c').and.equal('bar');
         });
 
-        it('parses combo short flags with opt/req values, followed by args', function() {
+        it('parses combo short flags with opt/req values, followed by args', () => {
             cmd.usage('[foo] <bar>');
             cmd.option('-c, --color <color>');
             cmd.option('-F, --not-free');
@@ -350,7 +352,7 @@ describe('Command', function () {
             expect(cmd.args).to.have.property('etc').and.deep.equal(['c']);
         });
 
-        it('supports the unparse command, which erases all parsed values', function() {
+        it('supports the unparse command, which erases all parsed values', () => {
             cmd.usage('[foo] <bar>');
             cmd.option('-b, --baz');
 
@@ -365,8 +367,8 @@ describe('Command', function () {
     });
 });
 
-function parse(cmd, line) {
-    var args = line.split(/ +/);
+function parse(cmd: Command, line: string) {
+    const args = line.split(/ +/);
     args.unshift.apply(args, new Array(2));
     return cmd.parse(args);
 }

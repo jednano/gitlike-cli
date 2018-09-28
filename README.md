@@ -20,7 +20,7 @@ $ npm install gitlike-cli
 ## Getting Started
 
 ```js
-var program = require('gitlike-cli');
+import program from 'gitlike-cli';
 program.parse(process.argv);
 ```
 
@@ -48,7 +48,7 @@ Produces the following options:
 
 ```
     -h, --help     output help information
-    -V, --version  output version information
+    -v, --version  output version information
 ```
 
 You can output help or version information from code by calling the respective `.help(die)` or `.version(die)` methods. The `die` argument, if `true`, will simply call `process.exit()` for you.
@@ -127,7 +127,7 @@ program
     .option('-C, --no-cheese', 'You do not want any cheese')
     .parse(process.argv);
 
-var options = program.options;
+const options = program.options;
 console.log('you ordered a pizza with:');
 if (options.peppers) console.log('  - peppers');
 if (options.pineapple) console.log('  - pineapple');
@@ -169,7 +169,7 @@ program
   .option('-o, --optional [value]', 'An optional value')
   .parse(process.argv);
 
-var options = program.options;
+const options = program.options;
 console.log(' options.square: %j', options.square);
 options.range = options.range || [];
 console.log(' options.range: %j..%j', options.range[0], options.range[1]);
@@ -183,7 +183,7 @@ console.log(' args.files: %j', program.args.files);
 You can display arbitrary `-h, --help` information by listening for "help". The program will automatically exit once you are done so that the remainder of your program does not execute causing undesired behaviours. For example, in the following executable "stuff" will not output when `help` is used.
 
 ```js
-var program = require('../');
+import program from 'gitlike-cli';
 
 function list(val) {
   return val.split(',').map(Number);
@@ -198,7 +198,7 @@ program
 // must be before .parse() since
 // node's emit() is immediate
 
-program.on('help', function(){
+program.on('help', () => {
   console.log('  Examples:');
   console.log();
   console.log('    $ custom-help --help');
@@ -237,9 +237,9 @@ Examples:
 The base command for your program already has some error handling built-in. If you decide, however, that you want more control over the errors emitted, simply handle the `error` event in your code. In the example below, the error message is printed in red. Everything else is exactly what you would see in Git-like CLI's built-in error handling.
 
 ```js
-var clc = require('cli-color');
+import clc from 'cli-color';
 
-program.on('error', function(err, command){
+program.on('error', (err, command) => {
     console.log('');
     console.log(clc.red('  Error:', err.message));
     command.outputUsage();
@@ -274,7 +274,7 @@ Any unhandled errors will not emit an error event, so it will be pretty ugly. Pl
 ```
 The MIT License (MIT)
 
-Copyright (c) <2013> Jed Hunsaker
+Copyright (c) <2013> Jed Mao
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -302,6 +302,6 @@ THE SOFTWARE.
 [git command and its sub-commands]: http://git-scm.com/docs
 [`git commit`]: http://git-scm.com/docs/git-commit
 [Build Status]: https://secure.travis-ci.org/jedmao/gitlike-cli.svg
-[Issue Tracker]: https://github.com/jedhunsaker/gitlike-cli/issues
+[Issue Tracker]: https://github.com/jedmao/gitlike-cli/issues
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jedmao/gitlike-cli/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

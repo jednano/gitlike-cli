@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var program = require('../');
+import program from '../lib';
 
 program
     .option('-p, --peppers', 'Add peppers')
@@ -14,7 +14,7 @@ program
     .option('-C, --no-cheese', 'You do not want any cheese')
     .parse(process.argv);
 
-var options = program.options;
+const options = program.options;
 console.log('you ordered a pizza with:');
 if (options.peppers) console.log('  - peppers');
 if (options.pineapple) console.log('  - pineapple');

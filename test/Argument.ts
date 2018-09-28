@@ -1,27 +1,28 @@
-var expect = require('chai').expect;
+import * as chai from 'chai';
+import sinonChai from 'sinon-chai';
+chai.use(sinonChai);
+const expect = chai.expect;
 
-var Argument = require('../lib/Argument');
+import Argument from '../lib/Argument';
 
-
-// ReSharper disable WrongExpressionStatement
 describe('Argument', function () {
 
     it('supports optional mode', function () {
-        var arg = new Argument('[foo]');
+        const arg = new Argument('[foo]');
         expect(arg).to.have.property('name').and.equal('foo');
         expect(arg).to.have.property('optional').and.be.true;
         expect(arg).to.have.property('required').and.be.false;
     });
 
     it('supports required mode', function () {
-        var arg = new Argument('<foo>');
+        const arg = new Argument('<foo>');
         expect(arg).to.have.property('name').and.equal('foo');
         expect(arg).to.have.property('required').and.be.true;
         expect(arg).to.have.property('optional').and.be.false;
     });
 
     it('supports optional repeating mode', function () {
-        var arg = new Argument('[<foo>...]');
+        const arg = new Argument('[<foo>...]');
         expect(arg).to.have.property('name').and.equal('foo');
         expect(arg).to.have.property('optional').and.be.true;
         expect(arg).to.have.property('required').and.be.false;
@@ -29,7 +30,7 @@ describe('Argument', function () {
     });
 
     it('supports required repeating mode', function () {
-        var arg = new Argument('<foo>...');
+        const arg = new Argument('<foo>...');
         expect(arg).to.have.property('name').and.equal('foo');
         expect(arg).to.have.property('required').and.be.true;
         expect(arg).to.have.property('optional').and.be.false;

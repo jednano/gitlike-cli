@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var program = require('..');
+import program from '../lib';
 
 program
     .command('install [name]', 'install one or more packages')

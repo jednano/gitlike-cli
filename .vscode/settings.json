@@ -1,0 +1,7 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/*.js": true,
+    "**/*.d.ts": true,
+  },
+}

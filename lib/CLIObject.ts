@@ -1,33 +1,29 @@
-﻿var EventEmitter = require('events').EventEmitter;
+﻿import { EventEmitter } from 'events';
 
-var CLIError = require('./CLIError');
-var util = require('./util');
+import CLIError from './CLIError';
 
+export default class CLIObject extends EventEmitter {
 
-function CLIObject(onError) {
-    CLIObject.super_.call(this);
-    this.onError = onError || this.onError;
+    public Error: typeof CLIError;
 
-    var name = this.name + 'Error';
-    function CLIObjectError(message) {
-        CLIObjectError.super_.call(this, message);
-        this.name = name;
+    constructor(public name: string) {
+        super()
+
+        class CLIObjectError extends CLIError {
+            constructor(message: string) {
+                super(message)
+                this.name = `${name}Error`;
+            }
+        }
+
+        this.Error = CLIObjectError;
     }
 
-    util.inherits(CLIObjectError, CLIError);
-    this.Error = CLIObjectError;
-}
+    public error(message: string) {
+        this.onError(new this.Error(message));
+    }
 
-module.exports = util.inherits(CLIObject, EventEmitter, {
-
-    error: function(message) {
-        var err = new this.Error(message);
-        err.command = this;
-        this.onError(err);
-    },
-
-    onError: function(err) {
+    protected onError(err: CLIError) {
         this.emit('error', err, err.command);
     }
-
-});
+}

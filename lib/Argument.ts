@@ -1,34 +1,44 @@
-var CLIError = require('./CLIError');
-var CLIObject = require('./CLIObject');
-var util = require('./util');
+import CLIObject from './CLIObject';
+import Command from './Command';
 
+export default class Argument extends CLIObject {
 
-function Argument(value, onError) {
-    Argument.super_.call(this, onError);
-    this.value = value;
-    this.parse(value);
-}
+    /**
+     * e.g., [<foo-bar>...]
+     */
+    private optionalRepeatingPat = /^\[<([a-z_][a-z_-]*)>\.{3}\]$/i;
 
-module.exports = util.inherits(Argument, CLIObject, {
+    /**
+     * e.g., <foo-bar>...
+     */
+    private requiredRepeatingPat = /^<([a-z_][a-z_-]*)>\.{3}$/i;
 
-    name: 'Argument',
+    /**
+     * e.g., [foo-bar]
+     */
+    private optionalPat = /^\[([a-z_][a-z_-]*)\]$/i;
 
-    // [<foo-bar>...]
-    optionalRepeatingPat: /^\[<([a-z_][a-z_-]*)>\.{3}\]$/i,
+    /**
+     * e.g., <foo-bar>
+     */
+    private requiredPat = /^<([a-z_][a-z_-]*)>$/i;
 
-    // <foo-bar>...
-    requiredRepeatingPat: /^<([a-z_][a-z_-]*)>\.{3}$/i,
+    public required = false;
+    public repeating = false;
+    public custom = false;
+    public command?: Command;
 
-    // [foo-bar]
-    optionalPat: /^\[([a-z_][a-z_-]*)\]$/i,
+    public get optional() {
+        return !this.required;
+    }
 
-    // <foo-bar>
-    requiredPat: /^<([a-z_][a-z_-]*)>$/i,
+    constructor(value: string) {
+        super('Argument');
+        this.parse(value);
+    }
 
-    parse: function(value) {
-        this.required = false;
-        this.repeating = false;
-        var m;
+    parse(value: string) {
+        let m: RegExpMatchArray | null;
         if (m = value.match(this.optionalRepeatingPat)) {
             this.repeating = true;
         } else if (m = value.match(this.requiredRepeatingPat)) {
@@ -40,19 +50,16 @@ module.exports = util.inherits(Argument, CLIObject, {
             //this.error('Invalid format: ' + value);
             this.custom = true;
         }
-        this.name = m && m.pop();
-        this.optional = !this.required;
-    },
-
-    toString: function() {
-        if (this.optional) {
-            if (this.repeating) {
-                return '[<' + this.name + '>...]';
-            }
-            return '[' + this.name + ']';
-        }
-        var result = '<' + this.name + '>';
-        return (this.repeating) ? result + '...' : result;
+        this.name = (m && m.pop()) || '';
     }
 
-});
+    toString() {
+        if (this.optional) {
+            return (this.repeating)
+                ? `[<${this.name}>...]`
+                : `[${this.name}]`;
+        }
+        const result = `<${this.name}>`;
+        return (this.repeating) ? `${result}...` : result;
+    }
+}

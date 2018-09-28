@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var program = require('../');
+import program from '../lib';
 
 function range(val) {
   return val.split('..').map(Number) || [];
@@ -26,7 +26,7 @@ program
   .option('-o, --optional [value]', 'An optional value')
   .parse(process.argv);
 
-var options = program.options;
+const options = program.options;
 console.log(' options.square: %j', options.square);
 options.range = options.range || [];
 console.log(' options.range: %j..%j', options.range[0], options.range[1]);

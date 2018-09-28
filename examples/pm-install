@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-var program = require('..');
+import program from '../lib';
 
 program
     .usage('pm-install <packages>...')
     .option('-f, --force', 'force installation')
     .parse(process.argv);
 
-var pkgs = program.args.packages;
+const pkgs = program.args.packages;
 
 console.log();
 if (program.options.force) console.log('  force: install');
-pkgs.forEach(function(pkg){
+pkgs.forEach((pkg) => {
     console.log('  install : %s', pkg);
 });
 console.log();

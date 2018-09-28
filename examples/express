@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var program = require('../');
+import program from '../lib';
 
 program
     .option('-s, --sessions', 'add session support')
@@ -12,7 +12,7 @@ program
     .option('-c, --css <engine>', 'specify stylesheet engine (stylus|sass|less) [css]', 'css')
     .parse(process.argv);
 
-var options = program.options;
+const options = program.options;
 console.log(' - sessions %j', options.sessions);
 console.log(' - template %j', options.template);
 console.log(' - css %j', options.css);

@@ -1,11 +1,11 @@
-var path = require('path');
-var Command = require('./lib/Command');
+import { basename } from 'path';
 
+import Command from './Command';
 
-var cmd = new Command(path.basename(process.argv[1]));
+const cmd = new Command(basename(process.argv[1]));
 
-cmd.on('error', function(err, command) {
-    setTimeout(function() {
+cmd.on('error', (err, command) => {
+    setTimeout(() => {
         console.log();
         console.log('  Error:', err.message);
         command.outputUsage();
@@ -16,4 +16,4 @@ cmd.on('error', function(err, command) {
     }, 0);
 });
 
-module.exports = cmd;
+export default cmd;
