@@ -1,31 +1,46 @@
 {
   "name": "gitlike-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A git-like CLI library",
   "keywords": [
     "git",
     "cli"
   ],
-  "author": "Jed Hunsaker <jed.hunsaker[at]gmail.com",
+  "author": "Jed Mao <jedmao[at]outlook.com",
   "contributors": [
-    "Jed Hunsaker <jed.hunsaker[at]gmail.com>"
+    "Jed Mao <jedmao[at]outlook.com>"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "./lib"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "build": "tsc -p tsconfig.json",
+    "test": "mocha -r ts-node/register test/*.ts -R spec",
+    "watch": "npm test -- -w --watch-extensions ts"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jedhunsaker/gitlike-cli.git"
+    "url": "git://github.com/jedmao/gitlike-cli.git"
   },
-  "bugs": "https://github.com/jedhunsaker/gitlike-cli/issues",
+  "bugs": "https://github.com/jedmao/gitlike-cli/issues",
   "license": "MIT",
+  "dependencies": {
+    "lodash.camelcase": "^4.3.0",
+    "@types/node": "^10.11.0"
+  },
   "devDependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.20.1",
-    "sinon": "^1.10.2"
+    "@types/chai": "^4.1.5",
+    "@types/lodash.camelcase": "^4.3.4",
+    "@types/mocha": "^5.2.5",
+    "@types/sinon": "^5.0.2",
+    "@types/sinon-chai": "^3.2.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "sinon": "^6.3.4",
+    "sinon-chai": "^3.2.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
   }
 }

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var program = require('../');
+import program from '../lib';
 
 function list(val) {
     return val.split(',').map(Number);
@@ -16,7 +16,7 @@ program
     .option('-l, --list [items]', 'Specify list items defaulting to 1,2,3', list, [1,2,3])
     .parse(process.argv);
 
-var options = program.options;
+const options = program.options;
 console.log('  - %s template engine', options.templateEngine);
 console.log('  - %s cheese', options.cheese);
 console.log('  - %j', options.list);

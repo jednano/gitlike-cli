@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var program = require('../');
+import program from '../lib';
 
 program
     .option('-C, --chdir <path>', 'change the working directory')
@@ -15,9 +15,9 @@ program
     .command('setup [<env>...]')
     .description('run setup commands for all envs')
     .option("-s, --setup_mode [mode]", "Which setup mode to use")
-    .action(function(args, options){
-        var mode = options.setup_mode || "normal";
-        var env = args.env.join(',') || 'all';
+    .action((args, options) => {
+        const mode = options.setup_mode || "normal";
+        const env = args.env.join(',') || 'all';
         console.log('setup for %s env(s) with %s mode', env, mode);
     });
 
@@ -25,9 +25,9 @@ program
     .command('exec <cmd>')
     .description('execute the given remote cmd')
     .option("-e, --exec_mode <mode>", "Which exec mode to use")
-    .action(function(args, options){
+    .action((args, options) => {
         console.log('exec "%s" using %s mode', args.cmd, options.exec_mode);
-    }).on('help', function() {
+    }).on('help', () => {
         console.log('  Examples:');
         console.log();
         console.log('    $ deploy exec sequential');
@@ -37,7 +37,7 @@ program
 
 program
     .command('*')
-    .action(function(args){
+    .action((args) => {
         console.log('deploying "%s"', args.etc[0]);
     });
 

@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig",
+  "include": [
+    "lib/**/*.ts",
+    "test/**/*.ts",
+  ],
+  "compilerOptions": {
+    "rootDirs": [
+      "lib/*.ts",
+      "test/*.ts",
+    ],
+    "sourceMap": true,
+  },
+}
