@@ -11,6 +11,9 @@ import Option from './Option';
 
 export type CommandArg = string | NodeJS.ReadStream;
 
+/**
+ * Class representing a CLI command or sub-command.
+ */
 export default class Command extends CLIObject {
 
     private _options: { [key: string]: Option; } = {};
@@ -38,6 +41,31 @@ export default class Command extends CLIObject {
         this.usage(line || '');
     }
 
+    /**
+     * Provides usage information for the command.
+     *
+     * ```js
+program.usage('foo <bar>')
+```
+     *
+     * This tells the user that your command is named `foo` and requires a single argument named `bar`.
+     * The chevrons around `bar` designate `<bar>` as a required argument. If `<bar>` is not provided,
+     * the help information will automatically display.
+     *
+     * Calling the usage method without any arguments will display the generated usage information.
+     *
+     * ```js
+program
+    .usage('foo <bar>')
+    .usage()
+```
+     *
+     * Displays the following:
+     *
+     * ```
+Usage: foo [options] <bar>
+```
+     */
     public usage(line: string) {
         if (line === null) {
             this.outputUsage();
@@ -47,14 +75,14 @@ export default class Command extends CLIObject {
         this.validateUsage();
         this._args = [];
         const args = line.trim().split(/ +/);
-        this.setName(args);
+        this.setNameFromArgs(args);
         this.nextCommandArgument(args);
         this.validateCommandArguments();
         this.generateUsage();
         return this;
     }
 
-    public setName(args: string[]) {
+    public setNameFromArgs(args: string[]) {
         this._name = args.shift();
         if (this._name !== '*' && !/^[a-z][a-z_-]*$/i.test(this._name as string)) {
             args.unshift(this._name as string);
@@ -234,8 +262,33 @@ export default class Command extends CLIObject {
         );
     }
 
+    /**
+     * Options support `[optional]` or `<required>` args, but not `<repeating>...` args.
+     */
     public option(
+        /**
+         * e.g., "-p, --peppers"
+         *
+         * Short flags may be passed as a single arg (e.g., `-abc` is equivalent to `-a -b -c`).
+         *
+         * Multi-word options such as `--foo-bar` are camel-cased, becoming `program.options.fooBar`.
+         *
+         * Short combo flags with multiple args follow the same rules for parsing as do arguments
+         * (e.g., if `-abc` flags all have args attached to them, then `-abc foo bar baz` will assign
+         * the appropriate values, from left to right).
+         *
+         * Optional args, again, follow the same rules as command args. This differs from Git's CLI,
+         * but in a good way. Sure, `git commit -am "stuff"` parses `-m` as `"stuff"`, but
+         * `git commit -ma "stuff"` throws an error. Git-like CLI, knowing that `-m` has a required
+         * `<msg>` argument and `-a` has no argument at all, is smart enough to parse this command
+         * gracefully and without errors.
+         */
         flags: string,
+        /**
+         * The description of the option. Try to explain what happens when this particular option is
+         * provided. For example, an option with flags: `-p, --peppers` might be described as
+         * "Add peppers".
+         */
         description: string | null = null,
         fn: ((value: string) => string) | string = x => x,
         defaultValue = '',
